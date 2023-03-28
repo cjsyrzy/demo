@@ -1,0 +1,6 @@
+add_library(lin lin.c)
+
+target_include_directories(lin
+        PRIVATE ${PROJECT_SOURCE_DIR}/com
+        INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+        )

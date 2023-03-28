@@ -1,3 +1,3 @@
 @cd build
-display.exe %1
+demo.exe %1
 @cd ..

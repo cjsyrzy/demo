@@ -1,0 +1,6 @@
+add_library(com com.c)
+
+target_include_directories(com
+        PRIVATE ${PROJECT_SOURCE_DIR}/include
+        INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+        )

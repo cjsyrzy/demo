@@ -1,10 +1,10 @@
-# 添加cmake版本
+# 指定CMAKE版本
 cmake_minimum_required(VERSION 3.12.4)
 
-# 添加工程名及版本号
-project(display VERSION 0.1.0)
+# 设置工程名及版本号
+project(demo VERSION 0.0.1)
 
-# 定义编程语言版本
+# 指定C语言标准
 # set(CMAKE_C_STANDARD 11)#C11
 # set(CMAKE_CXX_STANDARD 17)#C17
 # set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,24 +12,28 @@ project(display VERSION 0.1.0)
 # 添加预编译宏定义
 add_compile_definitions(UNICODE _UNICODE)
 
-# include(CTest)
-# enable_testing()
+# 添加编译文件
 
-# add_compile_definitions(WINVER=0x0602 _WIN32_WINNT=0x0602)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR})
+# 添加子cmkae及功能库
+add_subdirectory(com)
+list(APPEND EXTRA_LIBS com)
+
+add_subdirectory(delay)
+list(APPEND EXTRA_LIBS delay)
+
+add_subdirectory(lin)
+list(APPEND EXTRA_LIBS lin)
+
+# add_subdirectory(lvgl)
+# list(APPEND EXTRA_LIBS lvgl lvgl_demos)
 
 # add_subdirectory(lv_drivers)
 # list(APPEND EXTRA_LIBS lv_drivers)
 
-# add_subdirectory(lv_demos)
-# list(APPEND EXTRA_LIBS lv_demos)
+# 添加可执行文件 exe
+add_executable(demo main.c)
 
-add_subdirectory(lvgl)
-add_subdirectory(lv_drivers)
+# 链接exe和库
+target_link_libraries(demo PRIVATE ${EXTRA_LIBS})
 
-add_executable(display main.c)
-# link library
-target_link_libraries(display PRIVATE lvgl::lvgl lvgl::demos lvgl::drivers)
-
-target_include_directories(display
-                           PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(demo PRIVATE ${PROJECT_SOURCE_DIR})

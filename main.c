@@ -12,9 +12,13 @@
 #include <unistd.h>
 #include <windows.h>
 
-#include "lvgl/lvgl.h"
-#include "lvgl/demos/lv_demos.h"
-#include "lv_drivers/win32drv/win32drv.h"
+// #include "lvgl/lvgl.h"
+// #include "lvgl/demos/lv_demos.h"
+// #include "lv_drivers/win32drv/win32drv.h"
+
+#include "delay.h"
+#include "com.h"
+#include "lin.h"
 
 /*********************
  *      DEFINES
@@ -215,18 +219,20 @@
  **********************/
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
 {
+    printf("project start\r\n");
+
     /*Initialize LittlevGL*/
-    lv_init();
+    // lv_init();
 
     /*Initialize the HAL for LittlevGL*/
-    lv_win32_init(hInstance, SW_SHOWNORMAL, 800, 480, NULL);
+    // lv_win32_init(hInstance, SW_SHOWNORMAL, 800, 480, NULL);
 
     /*Output prompt information to the console, you can also use printf() to print directly*/
-    LV_LOG_USER("LVGL initialization completed!");
+    // LV_LOG_USER("LVGL initialization completed!");
     // lv_demo_widgets();
     // lv_demo_benchmark();
     // lv_demo_music();
-    lv_demo_stress();
+    // lv_demo_stress();
 
     /*Run the demo*/
     // my_widget();
@@ -238,16 +244,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLi
     // }
 
     // printf("struct size a %d\r\n",sizeof(struct a));
-    printf("struct size b %d",2);
-
+    uint8_t dat[8] = {0x9d, 0xff, 0xf9, 0x20, 0x64, 0x00, 0x00, 0x00};
+    uint8_t dat2[8] = {0x9d, 0xff, 0xf9, 0x20, 0x00, 0x00, 0x00, 0x00};
     while (1)
     {
-        /* Periodically call the lv_task handler.
-         * It could be done in a timer interrupt or an OS task too.*/
-        lv_task_handler();
-        Sleep(10);
-        lv_tick_inc(10);
-        // printf("struct size b %d",2);
+        com_init(7, 460800);
+        // com_init(7, 19200);
+        lin_init();
+        delay_ms(100);
+        lin_write(0x03,dat,1);
+        // lin_read(0x03,dat,1);
+        printf("delay 1000 ms\r\n");
+        delay_ms(1000);
+        lin_write(0x03,dat2,1);
+        com_close();
+        return 0;
     }
-    return 0;
 }
